@@ -3,25 +3,31 @@ from django.db import models
 
 # Create your models here.
 
-class Users(models.Model):
-    password = models.CharField(max_length=50)
-    score = models.IntegerField(default = 0)
-    submissions = models.IntegerField(default=0)
 
-class Problems(models.Model):
+class Problem(models.Model):
     statement = models.CharField(max_length=1200)
     name = models.CharField(max_length=200)
     code = models.CharField(max_length=1200)
     difficulty = models.CharField(max_length=10)
 
-class Solutions(models.Model):
-    problem = models.ForeignKey(Problems, on_delete=models.CASCADE)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
+
+class Solution(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     language = models.CharField(max_length = 10)
     verdict = models.CharField(max_length=200)
     submitted_at = models.DateTimeField('date submitted')
+    submitted_code = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.verdict
+
 
 class TestCases(models.Model):
     input = models.CharField(max_length=200)
     output = models.CharField(max_length=200)
-    problem = models.ForeignKey(Problems, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.input
