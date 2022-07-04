@@ -1,14 +1,18 @@
-from django.shortcuts import render,HttpResponse
+from django.shortcuts import get_object_or_404, render,HttpResponse
 
 from .models import Problem, Solution
 
 # Create your views here.
 
 def problems(request):
-    return HttpResponse("Problems Page")
+    problem_list = Problem.objects.all()
+    context = { 'problem_list' : problem_list}
+    return render(request, 'OJ/problems.html', context)
 
-def problemDetails(request):
-    return HttpResponse("problemDetails Page")
+def problemDetails(request,problem_id):
+    problem = get_object_or_404(Problem, pk=problem_id)
+    context = { 'problem':problem}
+    return render(request,'OJ/problemDetails.html', context)
 
 def submitProblem(request):
     return HttpResponse("Submit Problem Page")
