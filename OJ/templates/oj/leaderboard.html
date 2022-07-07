@@ -1,0 +1,18 @@
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if solutions %}
+    <ul>
+        {% for solution in solutions %}
+            <p>{{ solution.verdict }} - {{ solution.problem.name}} - {{solution.submitted_at}}</p>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Submissions till now.. </p>
+{% endif %}
