@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.contrib import messages
 import filecmp, os
 
+from django.contrib.auth.decorators import login_required
+
 from .models import Problem, Solution
 
 # Create your views here.
@@ -19,6 +21,7 @@ def problemDetails(request,problem_id):
     context = { 'problem':problem}
     return render(request,'OJ/problemDetails.html', context)
 
+@login_required(login_url='members:login')
 def submitProblem(request,problem_id):
     f = request.FILES.get('solution' , False)
     a = request.POST['typedsol']
@@ -60,6 +63,7 @@ def submitProblem(request,problem_id):
     return HttpResponseRedirect(reverse('oj:leaderboard'))
 
 
+@login_required(login_url='members:login')
 def leaderboard(request):
     solutions = Solution.objects.all()
     return render(request, 'oj/leaderboard.html', {'solutions' : solutions})
