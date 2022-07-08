@@ -1,27 +1,114 @@
-<h1 align = "center">Problems</h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problems</title>
+</head>
+<body>
+<style>
+    body{
+        background-color: cyan;
+    }
+    .heading{
+        background-color: dodgerblue;
+        
+    }
+    #messages{
+        background-color: rgb(176, 235, 248);
+        color: rgb(7, 2, 2);
+        padding: 10px;
+        margin-top: 10px;
+    }
+    .btn{
+        width: 100;
+        height: 30;
+        background: blue;
+        float: right;
+        margin: 10px;
+    }
+
+    .btn-text{
+        text-decoration: initial;
+        color: white;
+    }
+    #problems {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 6px;
+    }
+
+    #problems td, #problems th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    #problems tr:nth-child(even){background-color: #f2f2f2;}
+
+    #problems tr:hover {background-color: #ddd;}
+
+    #problems th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: rgb(17, 104, 219);
+        color: white;
+    }
+    #sol-btn{
+        border-radius: 40%;
+        background: powderblue;
+        width: 40%;
+    }
+    #sol-btn-text{
+        text-decoration: initial;
+    }
+</style>
+
+
+<h1 align = "center" class = "heading">Problems</h1>
 
 {% if messages %}
-<ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <p id="messages">{{message}}</p>
     {% endfor %}
-</ul>
 {% endif %}
 
 {%if request.user.is_authenticated%}
-    <li> <a href = "{% url 'members:logout' %} ">Log Out</a></li>
+    
+        <button class = "btn"> <a class="btn-text" href = "{% url 'members:logout' %} ">LOG OUT</a></button>
+    
 {% else %}
-    <li> <a href = "{% url 'members:login' %} ">Log In</a></li>
-    <li> <a href = "{% url 'members:register' %} ">Sign Up</a></li>
+    
+        <button class = "btn"> <a class="btn-text" href = "{% url 'members:login' %} ">Log In</a></button>
+        <button class = "btn"> <a class="btn-text" href = "{% url 'members:register' %} ">Sign Up</a></button>
+   
 {% endif %}
 
 {% if problem_list %}
-    <ol>
+
+    <table id="problems">
+        <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <th>Difficulty</th>
+        <th>Solve</th>
+        </tr>
         {% for problem in problem_list %}
-            <li><a href = "{% url 'oj:problem_detail' problem.id %}"> {{ problem.name }} </a></li>
+            <tr>
+            <td>{{ problem.id }}</td>
+            <td>{{ problem.name }}</td>
+            <td>{{ problem.difficulty }}</td>
+            <td><button id = "sol-btn"><a id = "sol-btn-text" href = "{% url 'oj:problem_detail' problem.id %}"> Solve </a></button></td>
+            </tr>
         {% endfor %}
-    </ol> 
+        
+    </table>
 {% else %}
     <p>Nothing to show.<p>
 {% endif %}
 
+
+    
+</body>
+</html>

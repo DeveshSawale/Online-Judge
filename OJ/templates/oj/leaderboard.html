@@ -1,18 +1,76 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submissions</title>
+</head>
+<style>
+    body{
+        background-color: cyan;
+    }
+    .heading{
+        background-color: blue;
+        margin-bottom: 10px;
+    }
+    #submissions {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    #submissions td, #submissions th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-{% if solutions %}
-    <ul>
-        {% for solution in solutions %}
-            <p>{{ solution.verdict }} - {{ solution.problem.name}} - {{solution.submitted_at}}</p>
+    #submissions tr:nth-child(even){background-color: #f2f2f2;}
+
+    #submissions tr:hover {background-color: #ddd;}
+
+    #submissions th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: rgb(17, 104, 219);
+        color: white;
+    }
+</style>
+<body>
+    <h1 align = "center" class = "heading">Submissions</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
     </ul>
-{% else %}
-    <p>No Submissions till now.. </p>
-{% endif %}
+    {% endif %}
+    
+    {% if solutions %}
+        <table id="submissions">
+            <tr>
+            <th>No.</th>
+            <th>User</th>
+            <th>Problem</th>
+            <th>Verdict</th>
+            <th>Submit Time</th>
+            </tr>
+            {% for solution in solutions %}
+                <tr>
+                <td>{{ solution.id }}</td>
+                <td> --- </td>
+                <td>{{ solution.problem.name }}</td>
+                <td>{{ solution.verdict }}</td>
+                <td>{{ solution.submitted_at }}</td>
+                </tr>
+            {% endfor %}
+            
+        </table>
+    {% else %}
+        <p>No Submissions till now.. </p>
+    {% endif %}
+</body>
+
+
+
