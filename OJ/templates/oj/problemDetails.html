@@ -19,17 +19,21 @@
         -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 		border-radius: 5px;
     }
+    #messages{
+        background-color: grey;
+        color: #fff;
+        padding: 10px;
+        margin-top: 10px;
+    }
 </style>
 <body>
    
     <h1 align = "center">{{ problem.name }}</h1>
 
 {% if messages %}
-<ul class="messages">
     {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+		<p id="messages">{{message}}</p>
+	{% endfor %}	
 {% endif %}
 
 <h3>Problem Statement : </h3>
@@ -38,7 +42,7 @@
 
     <h3>Test Cases : </h3>
     <ul>
-        {% for testcase in problem.testcases_set.all %}
+        {% for testcase in problem.testcases_set.all%}
         <li>Input : {{ testcase.input }}</li>
         <li>Output : {{ testcase.output }}</li>
         <br></br>
@@ -60,7 +64,9 @@
             </div>
         </fieldset>
     </form>
-    {% endif %}
+{%else%}
+    <h2 align = 'center'>Please Log In to Submit your code..</h2>
+{% endif %}
     
     
 

@@ -23,27 +23,41 @@ def problemDetails(request,problem_id):
 
 @login_required(login_url='members:login')
 def submitProblem(request,problem_id):
+    curr_user = request.user
     f = request.FILES.get('solution' , False)
     a = request.POST['typedsol']
     if(f):
         with open('/Devesh/solution.cpp','wb+') as dest:
             for chunk in f.chunks():
                 dest.write(chunk)
+            code = dest.read()
     elif(len(a) != 0):
-        with open('/Devesh/solution.cpp','w') as dest:
+        with open('/Devesh/solution.cpp','w+') as dest:
             dest.write(a)
+            code = dest.read()
     else:
         problem = get_object_or_404(Problem, pk=problem_id)
         messages.info(request, "Please select a file or write code in textarea ")
         context = { 'problem':problem}
         return render(request,'OJ/problemDetails.html', context)
     
+    problem = get_object_or_404(Problem, pk = problem_id)
     os.system('g++ /Devesh/solution.cpp ')
-    os.system('a.exe < /Devesh/input.txt > /Devesh/out.txt')
+
+    with open('/Devesh/input.txt' , 'w+') as input:
+        n = problem.testcases_set.count()
+        input.write(str(n))
+        input.write('\n')
+        for testcase in problem.testcases_set.all():
+            input.write(testcase.input)
+            input.write('\n')
+    
+    os.system('a.exe < /Devesh/input.txt > \Devesh\out.txt')
         
 
-    out1 = '/Devesh/out.txt'
-    out2 = '/Devesh/acc_out.txt'
+    out2 = problem.output.path
+    out1 = '\Devesh\out.txt'
+    print(code)
 
     if(filecmp.cmp(out1,out2,shallow=False)):
         messages.success(request, 'Your solution was accepted..')
@@ -53,17 +67,24 @@ def submitProblem(request,problem_id):
         verdict = 'Wrong answer'
 
     solution = Solution()
+    solution.user = curr_user
     solution.language = 'cpp'
     solution.problem = Problem.objects.get(pk=problem_id)
     solution.verdict = verdict
     solution.submitted_at = timezone.now()
-    solution.submitted_code = '/Devesh/solution.cpp'
+    
+    solution.submitted_code = 'code'
     solution.save()
+
+    os.remove('/Devesh/solution.cpp')
+    os.remove('/Devesh/input.txt')
+    os.remove('/Devesh/out.txt')
+    os.remove('a.exe')
 
     return HttpResponseRedirect(reverse('oj:leaderboard'))
 
 
 @login_required(login_url='members:login')
 def leaderboard(request):
-    solutions = Solution.objects.all()
+    solutions = reversed(Solution.objects.all())
     return render(request, 'oj/leaderboard.html', {'solutions' : solutions})

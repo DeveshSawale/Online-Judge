@@ -35,16 +35,20 @@
         background-color: rgb(17, 104, 219);
         color: white;
     }
+    #messages{
+        background-color: grey;
+        color: #fff;
+        padding: 10px;
+        margin-top: 10px;
+    }
 </style>
 <body>
     <h1 align = "center" class = "heading">Submissions</h1>
 
     {% if messages %}
-    <ul class="messages">
         {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+			<p id="messages">{{message}}</p>
+		{% endfor %}	
     {% endif %}
     
     {% if solutions %}
@@ -59,7 +63,7 @@
             {% for solution in solutions %}
                 <tr>
                 <td>{{ solution.id }}</td>
-                <td> --- </td>
+                <td>{{ solution.user}}</td>
                 <td>{{ solution.problem.name }}</td>
                 <td>{{ solution.verdict }}</td>
                 <td>{{ solution.submitted_at }}</td>
